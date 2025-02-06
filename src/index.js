@@ -144,7 +144,7 @@ app.post('/api/teams/:teamId/invite', async (req, res) => {
 app.get('/join-team/:token', async (req, res) => {
     if (!req.session.user) {
         req.session.pendingInvite = req.params.token;
-        return res.redirect('/auth/google');
+        return res.redirect('/');
     }
 
     try {

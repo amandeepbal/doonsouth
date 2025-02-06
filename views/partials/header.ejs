@@ -2,14 +2,37 @@
 <head>
     <title>Auth App</title>
     <link rel="stylesheet" href="/css/style.css">
+    <style type="text/tailwind">
+        @layer base {
+            [type='text'],
+            [type='email'],
+            [type='url'],
+            [type='password'],
+            [type='number'],
+            [type='date'],
+            [type='datetime-local'],
+            [type='month'],
+            [type='search'],
+            [type='tel'],
+            [type='time'],
+            [type='week'],
+            [multiple],
+            textarea,
+            select {
+                @apply w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav>
+    <nav class="flex justify-between items-center px-4 py-2">
         <% if (locals.user) { %>
-            <span>Welcome, <%= user.user_metadata.name %></span>
-            <a href="/auth/logout">Logout</a>
+            <span class="text-gray-700">Welcome, <%= user.user_metadata.name %></span>
+            <a href="/auth/logout" class="text-indigo-600 hover:text-indigo-800">Logout</a>
         <% } else { %>
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
+            <div class="space-x-4">
+                <a href="/login" class="text-indigo-600 hover:text-indigo-800">Login</a>
+                <a href="/register" class="text-indigo-600 hover:text-indigo-800">Register</a>
+            </div>
         <% } %>
     </nav>

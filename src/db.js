@@ -289,7 +289,7 @@ const TeamManager = {
                 `SELECT 
                   user_id, 
                   name, 
-                  email 
+                  email, 
                   joined_at,
                   has_paid 
                  FROM team_members 

@@ -3,19 +3,53 @@
 <% if (locals.error) { %>
     <p style="color: red;"><%= error %></p>
 <% } %>
-<form action="/auth/register" method="POST">
+<form action="/auth/register" method="POST" class="mt-8 space-y-6">
     <div>
-        <label>Email:</label>
-        <input type="email" name="email" required>
+        <div>
+            <label for="email" class="text-lg font-medium text-gray-900 mb-4">
+              Email address
+            </label>
+            <div class="mt-1">
+              <input 
+                id="email"
+                name="email" 
+                type="email" 
+                required 
+                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                placeholder="Enter your email"
+              >
+            </div>
+          </div>
     </div>
     <div>
-        <label>Name:</label>
-        <input type="name" name="name" required>
-    </div>
+        <label for="name" class="text-lg font-medium text-gray-900 mb-4">
+          Name
+        </label>
+        <div class="mt-1">
+          <input 
+            id="name"
+            name="name" 
+            required 
+            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter your name"
+          >
+        </div>
+      </div>
     <div>
-        <label>Password:</label>
-        <input type="password" name="password" required>
-    </div>
+        <label for="password" class="text-lg font-medium text-gray-900 mb-4">
+          Password
+        </label>
+        <div class="mt-1">
+          <input 
+            id="password"
+            name="password" 
+            type="password" 
+            required 
+            class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            placeholder="Enter your password"
+          >
+        </div>
+      </div>
     <button type="submit">Register</button>
 </form>
 <%- include('partials/footer') %>

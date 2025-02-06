@@ -33,10 +33,6 @@
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 py-6">
         <% if (user) { %>
-            <div class="bg-white shadow rounded-lg p-6">
-                <h2 class="text-lg font-medium text-gray-900 mb-4">Welcome, <%= user.user_metadata.name %>!</h2>
-                <p class="text-gray-600">Select a team from the dropdown above or create a new one to get started.</p>
-            </div>
             <div id="teamMembersList" class="mt-6 hidden">
                 <!-- Contribution Section -->
                 <div class="contribution-section mb-6">
@@ -54,7 +50,7 @@
                                                 class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                 <span class="text-gray-500 sm:text-sm">$</span>
                                             </div>
-                                            <input type="number" name="contributionAmount" id="contributionAmount"
+                                            <input type="number" name="contributionAmount" id="newContributionAmount"
                                                 class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
                                                 placeholder="0.00" min="0" step="0.01">
                                         </div>
@@ -82,7 +78,7 @@
                 <div class="text-center py-12">
                     <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Welcome to Team Management</h2>
                     <p class="text-lg text-gray-600 mb-8">Login to create or join teams.</p>
-                    <a href="/auth/google"
+                    <a href="/"
                         class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
                         Get Started
                     </a>
@@ -110,13 +106,14 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
+  <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
-
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM fully loaded");
             // Add click event listener to dropdown button
             const dropdownButton = document.getElementById('teamsDropdownButton');
             if (dropdownButton) {
@@ -262,58 +259,6 @@
             }
         }
 
-        const imageCache = new Map();
-
-        function getCachedImage(url) {
-            if (imageCache.has(url)) {
-                return imageCache.get(url);
-            }
-
-            return preloadImage(url)
-                .then(resolvedUrl => {
-                    imageCache.set(url, resolvedUrl);
-                    return resolvedUrl;
-                })
-                .catch(() => {
-                    const fallbackUrl = '/api/placeholder/40/40';
-                    imageCache.set(url, fallbackUrl);
-                    return fallbackUrl;
-                });
-        }
-
-        // Rate limiting and caching setup
-        //        const imageCache = new Map();
-        const RETRY_DELAY = 2000; // 2 seconds
-        const MAX_RETRIES = 3;
-
-        async function getProfileImage(url, retryCount = 0) {
-            // If URL is already cached, return it
-            if (imageCache.has(url)) {
-                return imageCache.get(url);
-            }
-
-            try {
-                const response = await fetch(url);
-
-                if (response.ok) {
-                    imageCache.set(url, url);
-                    return url;
-                }
-
-                // Handle rate limiting
-                if (response.status === 429 && retryCount < MAX_RETRIES) {
-                    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY * (retryCount + 1)));
-                    return getProfileImage(url, retryCount + 1);
-                }
-
-                // If all retries failed or other error, use placeholder
-                throw new Error('Failed to load image');
-            } catch (error) {
-                const fallbackUrl = '/api/placeholder/40/40';
-                imageCache.set(url, fallbackUrl);
-                return fallbackUrl;
-            }
-        }
 
         async function loadTeamMembers(teamId) {
             try {
@@ -449,6 +394,7 @@
 
                 // Add members list (keeping the existing member list code)
                 for (const member of teamDetails.members) {
+                    console.log(member);
                     const memberDiv = document.createElement('div');
                     memberDiv.className = 'bg-white shadow rounded-lg p-4 flex items-center justify-between';
 
@@ -456,10 +402,8 @@
 
                     memberDiv.innerHTML = `
                 <div class="flex items-center space-x-4">
-                    <img src="${member.picture}" alt="${member.name}" 
-                         class="w-10 h-10 rounded-full object-cover"
-                         onerror="this.src='/api/placeholder/40/40';">
-                    <div>
+ 
+                   <div>
                         <div class="flex items-center">
                             <span class="font-medium text-gray-900">${member.name}</span>
                             ${isTeamOwner ?
@@ -530,8 +474,8 @@
                             <span class="text-gray-500 sm:text-sm">$</span>
                         </div>
                         <input type="number" 
-                               name="newContributionAmount" 
-                               id="newContributionAmount" 
+                               name="updateContributionAmount" 
+                               id="updateContributionAmount" 
                                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md" 
                                value="${currentAmount}"
                                min="0" 
@@ -547,10 +491,10 @@
         }
 
         // Separate function for updating the contribution amount
-        async function updateContributionAmount(teamId) {ƒ
+        async function updateContributionAmount(teamId) {
             // Get the input element using the new ID
-            const amountInput = document.getElementById('newContributionAmount');
-
+            const amountInput = document.getElementById('updateContributionAmount');
+            console.log('Team ID:',  teamId )
             console.log('Input element found:', !!amountInput);
             console.log('Raw input value:', amountInput?.value);
 
@@ -693,14 +637,6 @@
             }
         }
 
-        function preloadImage(url) {
-            return new Promise((resolve, reject) => {
-                const img = new Image();
-                img.onload = () => resolve(url);
-                img.onerror = () => reject(new Error('Image load failed'));
-                img.src = url;
-            });
-        }
 
         function showCreateTeamModal() {
             document.getElementById('createTeamModal').style.display = 'block';
