@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
 <head>
     <title>Auth App</title>
@@ -7,7 +6,7 @@
 <body>
     <nav>
         <% if (locals.user) { %>
-            <span>Welcome, <%= user.email %></span>
+            <span>Welcome, <%= user.user_metadata.name %></span>
             <a href="/auth/logout">Logout</a>
         <% } else { %>
             <a href="/login">Login</a>

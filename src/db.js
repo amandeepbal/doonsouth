@@ -23,7 +23,6 @@ db.serialize(() => {
     user_id TEXT,
     name TEXT NOT NULL,
     email TEXT NOT NULL,
-    picture TEXT,
     has_paid BOOLEAN DEFAULT 0,
     joined_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (team_id, user_id),
@@ -62,8 +61,8 @@ const TeamManager = {
 
           // Add creator as team member with profile info
           db.run(
-            'INSERT INTO team_members (team_id, user_id, name, email, picture) VALUES (?, ?, ?, ?, ?)',
-            [teamId, userId, userProfile.name, userProfile.email, userProfile.picture],
+            'INSERT INTO team_members (team_id, user_id, name, email) VALUES (?, ?, ?, ?)',
+            [teamId, userId, userProfile.name, userProfile.email],
             (err) => {
               if (err) reject(err);
               else resolve(teamId);
@@ -129,8 +128,8 @@ const TeamManager = {
           }
 
           db.run(
-            'INSERT OR IGNORE INTO team_members (team_id, user_id, name, email, picture) VALUES (?, ?, ?, ?, ?)',
-            [invitation.team_id, userId, userProfile.name, userProfile.email, userProfile.picture],
+            'INSERT OR IGNORE INTO team_members (team_id, user_id, name, email) VALUES (?, ?, ?, ?)',
+            [invitation.team_id, userId, userProfile.name, userProfile.email],
             (err) => {
               if (err) reject(err);
               else resolve(invitation.team_id);
@@ -290,8 +289,7 @@ const TeamManager = {
                 `SELECT 
                   user_id, 
                   name, 
-                  email, 
-                  picture, 
+                  email 
                   joined_at,
                   has_paid 
                  FROM team_members 
@@ -306,8 +304,7 @@ const TeamManager = {
   
                   // Process members to ensure valid profile pictures
                   const processedMembers = members.map(member => ({
-                    ...member,
-                    picture: member.picture || `/api/placeholder/40/40`
+                    ...member
                   }));
   
                   // Combine all the data

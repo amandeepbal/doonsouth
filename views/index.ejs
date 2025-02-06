@@ -1,7 +1,6 @@
 <%- include('partials/header') %>
-<h1>Welcome to the Home Page</h1>
 <% if (locals.user) { %>
-    <p>You are logged in!</p>
+    <%- include('team') %>
 <% } else { %>
     <p>Please log in or register</p>
 <% } %>
