@@ -1,215 +1,270 @@
-    <!-- Header -->
-    <header class="bg-white shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-8">
-                <h1 class="text-xl font-bold text-gray-900">Team Management</h1>
-                <div id="selectedTeamDisplay" class="text-xl font-bold text-gray-900 hidden"></div>
-                <% if (user) { %>
-                    <div class="dropdown" id="teamsDropdown">
-                        <button id="teamsDropdownButton"
-                            class="bg-white px-4 py-2 text-gray-700 font-medium rounded-md border hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Teams
-                            <span class="ml-2">▼</span>
-                        </button>
-                        <div class="dropdown-content mt-2" id="teamsMenu">
-                            <div class="py-2">
-                                <div id="teamsList">
-                                    <!-- Teams will be loaded here -->
-                                </div>
-                                <div class="border-t border-gray-100 mt-2"></div>
-                                <a href="#" onclick="showCreateTeamModal()"
-                                    class="flex items-center px-4 py-3 text-sm text-indigo-600 hover:bg-gray-50">
-                                    <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
-                                    Create New Team
-                                </a>
+<!-- Header -->
+<header class="bg-white shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-8">
+            <h1 class="text-xl font-bold text-gray-900">Team Management</h1>
+            <div id="selectedTeamDisplay" class="text-xl font-bold text-gray-900 hidden"></div>
+            <% if (user) { %>
+                <div class="dropdown" id="teamsDropdown">
+                    <button id="teamsDropdownButton"
+                        class="bg-white px-4 py-2 text-gray-700 font-medium rounded-md border hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Teams
+                        <span class="ml-2">▼</span>
+                    </button>
+                    <div class="dropdown-content mt-2" id="teamsMenu">
+                        <div class="py-2">
+                            <div id="teamsList">
+                                <!-- Teams will be loaded here -->
                             </div>
+                            <div class="border-t border-gray-100 mt-2"></div>
+                            <a href="#" onclick="showCreateTeamModal()"
+                                class="flex items-center px-4 py-3 text-sm text-indigo-600 hover:bg-gray-50">
+                                <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
+                                Create New Team
+                            </a>
                         </div>
                     </div>
-                    <% } %>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
-        <% if (user) { %>
-            <div id="teamMembersList" class="mt-6 hidden">
-                <!-- Contribution Section -->
-                <div class="contribution-section mb-6">
-                    <div class="bg-white shadow rounded-lg p-4">
-                        <div id="contributionSettingArea">
-                            <!-- Contribution setting form for team creator -->
-                            <div id="setContributionForm" class="mb-4" style="display: none;">
-                                <div class="flex items-center space-x-4">
-                                    <div class="flex-1">
-                                        <label for="contributionAmount"
-                                            class="block text-sm font-medium text-gray-700">Set Contribution Amount Per
-                                            Member</label>
-                                        <div class="mt-1 relative rounded-md shadow-sm">
-                                            <div
-                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                <span class="text-gray-500 sm:text-sm">$</span>
-                                            </div>
-                                            <input type="number" name="contributionAmount" id="newContributionAmount"
-                                                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
-                                                placeholder="0.00" min="0" step="0.01">
-                                        </div>
-                                    </div>
-                                    <button onclick="setContributionAmount(currentTeamId)"
-                                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        Set Amount
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- Contribution status will be shown here -->
-                            <div id="contributionStatus"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Team Members Section -->
-                <h3 class="text-lg font-medium text-gray-900 mb-4">Team Members</h3>
-                <div class="space-y-4">
-                    <!-- Team members will be loaded here -->
-                </div>
-            </div>
-
-            <% } else { %>
-                <div class="text-center py-12">
-                    <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Welcome to Team Management</h2>
-                    <p class="text-lg text-gray-600 mb-8">Login to create or join teams.</p>
-                    <a href="/"
-                        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
-                        Get Started
-                    </a>
                 </div>
                 <% } %>
-    </main>
-
-    <!-- Create Team Modal -->
-    <div id="createTeamModal" class="modal">
-        <div class="modal-content">
-            <h3 class="text-lg font-medium text-gray-900 mb-4">Create New Team</h3>
-            <input type="text" id="teamName"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="Enter team name">
-            <div class="mt-4 flex justify-end space-x-3">
-                <button onclick="hideCreateTeamModal()"
-                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                    Cancel
-                </button>
-                <button onclick="createTeam()"
-                    class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700">
-                    Create
-                </button>
-            </div>
         </div>
     </div>
+</header>
 
-  <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
-    <script src="https://cdn.tailwindcss.com"></script>
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 py-6">
+    <% if (user) { %>
+        <div id="teamMembersList" class="mt-6 hidden">
+            <!-- Contribution Section -->
+            <div class="contribution-section mb-6">
+                <div class="bg-white shadow rounded-lg p-4">
+                    <div id="contributionSettingArea">
+                        <!-- Contribution setting form for team creator -->
+                        <div id="setContributionForm" class="mb-4" style="display: none;">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1">
+                                    <label for="contributionAmount" class="block text-sm font-medium text-gray-700">Set
+                                        Contribution Amount Per
+                                        Member</label>
+                                    <div class="mt-1 relative rounded-md shadow-sm">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span class="text-gray-500 sm:text-sm">$</span>
+                                        </div>
+                                        <input type="number" name="contributionAmount" id="newContributionAmount"
+                                            class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-7 pr-12 sm:text-sm border-gray-300 rounded-md"
+                                            placeholder="0.00" min="0" step="0.01">
+                                    </div>
+                                </div>
+                                <button onclick="setContributionAmount(currentTeamId)"
+                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    Set Amount
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Contribution status will be shown here -->
+                        <div id="contributionStatus"></div>
+                    </div>
+                </div>
+            </div>
 
-    <script>
+            <!-- Team Members Section -->
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Team Members</h3>
+            <div class="space-y-4">
+                <!-- Team members will be loaded here -->
+            </div>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log("DOM fully loaded");
-            // Add click event listener to dropdown button
-            const dropdownButton = document.getElementById('teamsDropdownButton');
-            if (dropdownButton) {
-                dropdownButton.addEventListener('click', function (event) {
-                    toggleTeamsDropdown(event);
-                });
-            }
-        });
-        // Dropdown functionality
-        function toggleTeamsDropdown(event) {
-            if (event) {
-                event.stopPropagation();
-            }
-            const dropdown = document.getElementById('teamsDropdown');
-            dropdown.classList.toggle('active');
+            <!-- Add this after the contribution status section and before team members section -->
+             <br>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Team Expsnses</h3>
+               <div class="space-y-4" id="expensesContainer">
+                    <!-- Expenses will be loaded here -->
+                </div>
+
+        </div>
+
+        <% } else { %>
+            <div class="text-center py-12">
+                <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Welcome to Team Management</h2>
+                <p class="text-lg text-gray-600 mb-8">Login to create or join teams.</p>
+                <a href="/"
+                    class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700">
+                    Get Started
+                </a>
+            </div>
+            <% } %>
+</main>
+
+<!-- Create Team Modal -->
+<div id="createTeamModal" class="modal">
+    <div class="modal-content">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Create New Team</h3>
+        <input type="text" id="teamName"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Enter team name">
+        <div class="mt-4 flex justify-end space-x-3">
+            <button onclick="hideCreateTeamModal()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                Cancel
+            </button>
+            <button onclick="createTeam()"
+                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700">
+                Create
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Add this modal at the bottom of the file -->
+<div id="addExpenseModal" class="modal">
+    <div class="modal-content max-w-2xl">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Expense</h3>
+        <div class="space-y-4">
+            <div>
+                <label for="expenseDescription" class="block text-sm font-medium text-gray-700">Description</label>
+                <input type="text" id="expenseDescription"
+                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Enter expense description">
+            </div>
+            <div>
+                <label for="expenseAmount" class="block text-sm font-medium text-gray-700">Amount</label>
+                <div class="mt-1 relative rounded-md shadow-sm">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="text-gray-500 sm:text-sm">$</span>
+                    </div>
+                    <input type="number" id="expenseAmount"
+                        class="pl-7 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                        placeholder="0.00" min="0" step="0.01">
+                </div>
+            </div>
+            <div>
+                <label for="expenseDate" class="block text-sm font-medium text-gray-700">Date</label>
+                <input type="date" id="expenseDate"
+                    class="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Involved Team Members</label>
+                <div class="max-h-48 overflow-y-auto border border-gray-300 rounded-md p-2" id="teamMembersCheckboxes">
+                    <!-- Team members checkboxes will be populated here -->
+                </div>
+            </div>
+        </div>
+        <div class="mt-4 flex justify-end space-x-3">
+            <button onclick="hideAddExpenseModal()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
+                Cancel
+            </button>
+            <button onclick="addExpense()"
+                class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-700">
+                Add Expense
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log("DOM fully loaded");
+        // Add click event listener to dropdown button
+        const dropdownButton = document.getElementById('teamsDropdownButton');
+        if (dropdownButton) {
+            dropdownButton.addEventListener('click', function (event) {
+                toggleTeamsDropdown(event);
+            });
         }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function (event) {
-            const teamsDropdown = document.getElementById('teamsDropdown');
-            if (!event.target.closest('#teamsDropdown')) {
-                if (teamsDropdown) {
-                    teamsDropdown.classList.remove('active');
-                }
-            }
-        });
-
-        const currentUser = {
-            id: '<%= user?.id %>',
-            name: '<%= user?.name %>',
-            email: '<%= user?.email %>'
-        };
-        let currentTeamId = null;
-
-        function selectTeam(teamId, teamName) {
-            currentTeamId = teamId;
-
-            // Update header display
-            const teamDisplay = document.getElementById('selectedTeamDisplay');
-            if (teamDisplay) {
-                teamDisplay.textContent = teamName;
-                teamDisplay.classList.remove('hidden');
-            }
-
-            // Close dropdown
-            const dropdown = document.getElementById('teamsDropdown');
-            if (dropdown) {
-                dropdown.classList.remove('active');
-            }
-
-            // Hide previous team content if exists
-            const membersList = document.getElementById('teamMembersList');
-            if (membersList) {
-                membersList.classList.add('hidden');
-            }
-
-            // Load team members
-            loadTeamMembers(teamId);
+    });
+    // Dropdown functionality
+    function toggleTeamsDropdown(event) {
+        if (event) {
+            event.stopPropagation();
         }
+        const dropdown = document.getElementById('teamsDropdown');
+        dropdown.classList.toggle('active');
+    }
 
-        // Update the window click handler
-        window.onclick = function (event) {
-            const teamsDropdown = document.getElementById('teamsDropdown');
-            if (!event.target.closest('#teamsDropdown')) {
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function (event) {
+        const teamsDropdown = document.getElementById('teamsDropdown');
+        if (!event.target.closest('#teamsDropdown')) {
+            if (teamsDropdown) {
                 teamsDropdown.classList.remove('active');
             }
         }
+    });
 
-        // Toast notification function
-        function showToast(message, type) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.className = `toast ${type}`;
-            toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+    const currentUser = {
+        id: '<%= user?.id %>',
+        name: '<%= user?.name %>',
+        email: '<%= user?.email %>'
+    };
+    let currentTeamId = null;
+
+    function selectTeam(teamId, teamName) {
+        currentTeamId = teamId;
+
+        // Update header display
+        const teamDisplay = document.getElementById('selectedTeamDisplay');
+        if (teamDisplay) {
+            teamDisplay.textContent = teamName;
+            teamDisplay.classList.remove('hidden');
         }
 
-        // Teams functionality
-        async function loadTeams() {
-            try {
-                const response = await fetch('/api/teams');
-                const teams = await response.json();
-                const teamsList = document.getElementById('teamsList');
+        // Close dropdown
+        const dropdown = document.getElementById('teamsDropdown');
+        if (dropdown) {
+            dropdown.classList.remove('active');
+        }
 
-                teamsList.innerHTML = teams.map(team => `
+        // Hide previous team content if exists
+        const membersList = document.getElementById('teamMembersList');
+        if (membersList) {
+            membersList.classList.add('hidden');
+        }
+
+        // Load team members
+        loadTeamMembers(teamId);
+    }
+
+    // Update the window click handler
+    window.onclick = function (event) {
+        const teamsDropdown = document.getElementById('teamsDropdown');
+        if (!event.target.closest('#teamsDropdown')) {
+            teamsDropdown.classList.remove('active');
+        }
+    }
+
+    // Toast notification function
+    function showToast(message, type) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = `toast ${type}`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+            toast.style.display = 'none';
+        }, 3000);
+    }
+
+    // Teams functionality
+    async function loadTeams() {
+        try {
+            const response = await fetch('/api/teams');
+            const teams = await response.json();
+            const teamsList = document.getElementById('teamsList');
+
+            teamsList.innerHTML = teams.map(team => `
                  <div class="team-item px-4 py-3 hover:bg-gray-50 cursor-pointer" onclick="selectTeam('${team.id}', '${team.name}')">
                     <div class="team-item px-4 py-3 hover:bg-gray-50">
                         <div class="flex justify-between items-center">
                             <div class="flex items-center">
                                 <span class="text-sm text-gray-700 font-medium">${team.name}</span>
                                 ${team.is_creator
-                        ? '<span class="team-badge bg-indigo-100 text-indigo-800">Owner</span>'
-                        : '<span class="team-badge bg-gray-100 text-gray-800">Member</span>'
-                    }
+                    ? '<span class="team-badge bg-indigo-100 text-indigo-800">Owner</span>'
+                    : '<span class="team-badge bg-gray-100 text-gray-800">Member</span>'
+                }
                             </div>
                             <div class="flex items-center space-x-2">
                                 ${team.is_creator ? `
@@ -254,43 +309,43 @@
                     </div>
                  </div>
                     `).join('');
-            } catch (error) {
-                showToast('Error loading teams', 'error');
-            }
+        } catch (error) {
+            showToast('Error loading teams', 'error');
         }
+    }
 
 
-        async function loadTeamMembers(teamId) {
-            try {
-                const response = await fetch(`/api/teams/${teamId}/members`);
-                if (!response.ok) {
-                    throw new Error('Failed to load team members');
-                }
+    async function loadTeamMembers(teamId) {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/members`);
+            if (!response.ok) {
+                throw new Error('Failed to load team members');
+            }
 
-                const teamDetails = await response.json();
-                const membersList = document.getElementById('teamMembersList');
+            const teamDetails = await response.json();
+            const membersList = document.getElementById('teamMembersList');
 
-                if (!membersList) return;
+            if (!membersList) return;
 
-                membersList.classList.remove('hidden');
+            membersList.classList.remove('hidden');
 
-                // Get the contribution setting form and status divs
-                const setContributionForm = document.getElementById('setContributionForm');
-                const contributionStatus = document.getElementById('contributionStatus');
-                const membersContainer = membersList.querySelector('.space-y-4');
+            // Get the contribution setting form and status divs
+            const setContributionForm = document.getElementById('setContributionForm');
+            const contributionStatus = document.getElementById('contributionStatus');
+            const membersContainer = membersList.querySelector('.space-y-4');
 
-                // Clear previous content
-                contributionStatus.innerHTML = '';
-                membersContainer.innerHTML = '';  // Clear existing members
+            // Clear previous content
+            contributionStatus.innerHTML = '';
+            membersContainer.innerHTML = '';  // Clear existing members
 
-                // Show/hide contribution form based on if user is creator
-                const isCreator = teamDetails.created_by === currentUser.id;
+            // Show/hide contribution form based on if user is creator
+            const isCreator = teamDetails.created_by === currentUser.id;
 
-                // First, handle the contribution section
-                if (isCreator) {
-                    if (!teamDetails.contribution_amount || teamDetails.contribution_amount === 0) {
-                        // Show the input form for setting contribution amount
-                        contributionStatus.innerHTML = `
+            // First, handle the contribution section
+            if (isCreator) {
+                if (!teamDetails.contribution_amount || teamDetails.contribution_amount === 0) {
+                    // Show the input form for setting contribution amount
+                    contributionStatus.innerHTML = `
                     <div class="bg-white shadow rounded-lg p-4 mb-6">
                         <h4 class="text-lg font-medium text-gray-900 mb-4">Set Team Contribution</h4>
                         <div class="flex items-center space-x-4">
@@ -317,21 +372,28 @@
                             </button>
                         </div>
                     </div>`;
-                    } else {
-                        // Show contribution status with edit option
-                        const totalAmount = teamDetails.members.length * teamDetails.contribution_amount;
-                        const collectedAmount = teamDetails.members.filter(m => m.has_paid).length * teamDetails.contribution_amount;
-                        const remainingAmount = totalAmount - collectedAmount;
+                } else {
+                    // Show contribution status with edit option
+                    const totalAmount = teamDetails.members.length * teamDetails.contribution_amount;
+                    const collectedAmount = teamDetails.members.filter(m => m.has_paid).length * teamDetails.contribution_amount;
+                    const remainingAmount = totalAmount - collectedAmount;
 
-                        contributionStatus.innerHTML = `
+                    contributionStatus.innerHTML = `
                     <div class="bg-white shadow rounded-lg p-4 mb-6">
                         <div class="flex justify-between items-center mb-4">
                             <h4 class="text-lg font-medium text-gray-900">Team Contribution</h4>
-                            <button onclick="editContributionAmount('${teamId}', ${teamDetails.contribution_amount})"
-                                    class="text-sm text-indigo-600 hover:text-indigo-800">
-                                Edit Amount
-                            </button>
+                            <div class="space-x-4">
+                                <button onclick="editContributionAmount('${teamId}', ${teamDetails.contribution_amount})"
+                                        class="text-sm text-indigo-600 hover:text-indigo-800">
+                                    Edit Amount
+                                </button>
+                                <button onclick="showAddExpenseModal('${teamId}')"
+                                        class="text-sm text-indigo-600 hover:text-indigo-800">
+                                    Add Expense
+                                </button>
+                            </div>
                         </div>
+
                         <div class="grid grid-cols-2 gap-4 mb-4">
                             <div>
                                 <p class="text-sm text-gray-600">Amount per member</p>
@@ -346,7 +408,7 @@
                                 <p class="text-lg font-medium text-green-600">$${collectedAmount}</p>
                             </div>
                             <div>
-                                <p class="text-sm text-gray-600">Amount remaining</p>
+                                <p class="text-sm text-gray-600">Amount to be collected</p>
                                 <p class="text-lg font-medium text-red-600">$${remainingAmount}</p>
                             </div>
                         </div>
@@ -356,14 +418,14 @@
                         </div>
                     </div>
                 `;
-                    }
-                } else if (teamDetails.contribution_amount > 0) {
-                    // Show read-only contribution status for non-creators
-                    const totalAmount = teamDetails.members.length * teamDetails.contribution_amount;
-                    const collectedAmount = teamDetails.members.filter(m => m.has_paid).length * teamDetails.contribution_amount;
-                    const remainingAmount = totalAmount - collectedAmount;
+                }
+            } else if (teamDetails.contribution_amount > 0) {
+                // Show read-only contribution status for non-creators
+                const totalAmount = teamDetails.members.length * teamDetails.contribution_amount;
+                const collectedAmount = teamDetails.members.filter(m => m.has_paid).length * teamDetails.contribution_amount;
+                const remainingAmount = totalAmount - collectedAmount;
 
-                    contributionStatus.innerHTML = `
+                contributionStatus.innerHTML = `
                 <div class="bg-white shadow rounded-lg p-4 mb-6">
                     <h4 class="text-lg font-medium text-gray-900 mb-4">Team Contribution</h4>
                     <div class="grid grid-cols-2 gap-4 mb-4">
@@ -390,34 +452,33 @@
                     </div>
                 </div>
             `;
-                }
+            }
 
-                // Add members list (keeping the existing member list code)
-                for (const member of teamDetails.members) {
-                    console.log(member);
-                    const memberDiv = document.createElement('div');
-                    memberDiv.className = 'bg-white shadow rounded-lg p-4 flex items-center justify-between';
+            // Add members list (keeping the existing member list code)
+            for (const member of teamDetails.members) {
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'bg-white shadow rounded-lg p-4 flex items-center justify-between';
 
-                    const isTeamOwner = member.user_id === teamDetails.created_by;
+                const isTeamOwner = member.user_id === teamDetails.created_by;
 
-                    memberDiv.innerHTML = `
+                memberDiv.innerHTML = `
                 <div class="flex items-center space-x-4">
  
                    <div>
                         <div class="flex items-center">
                             <span class="font-medium text-gray-900">${member.name}</span>
                             ${isTeamOwner ?
-                            '<span class="ml-2 px-2 py-1 text-xs font-medium text-indigo-800 bg-indigo-100 rounded">Team Owner</span>'
-                            : ''}
+                        '<span class="ml-2 px-2 py-1 text-xs font-medium text-indigo-800 bg-indigo-100 rounded">Team Owner</span>'
+                        : ''}
                         </div>
                         <div class="text-sm text-gray-500">${member.email}</div>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     ${member.has_paid
-                            ? '<span class="px-2 py-1 text-sm font-medium text-green-800 bg-green-100 rounded">Paid</span>'
-                            : '<span class="px-2 py-1 text-sm font-medium text-red-800 bg-red-100 rounded">Pending</span>'
-                        }
+                        ? '<span class="px-2 py-1 text-sm font-medium text-green-800 bg-green-100 rounded">Paid</span>'
+                        : '<span class="px-2 py-1 text-sm font-medium text-red-800 bg-red-100 rounded">Pending</span>'
+                    }
                     ${isCreator ? `
                         <button onclick="updatePaymentStatus('${teamId}', '${member.user_id}', ${!member.has_paid})"
                                 class="px-3 py-1 text-sm font-medium ${member.has_paid ? 'text-red-600' : 'text-green-600'} border border-gray-300 rounded-md hover:bg-gray-50">
@@ -427,41 +488,41 @@
                 </div>
             `;
 
-                    membersContainer.appendChild(memberDiv);
-                }
-            } catch (error) {
-                console.error('Error loading team members:', error);
-                showToast('Error loading team members: ' + error.message, 'error');
+                membersContainer.appendChild(memberDiv);
             }
+        } catch (error) {
+            console.error('Error loading team members:', error);
+            showToast('Error loading team members: ' + error.message, 'error');
         }
+    }
 
-        // Update payment status function remains the same
-        async function updatePaymentStatus(teamId, memberId, hasPaid) {
-            try {
-                const response = await fetch(`/api/teams/${teamId}/members/${memberId}/payment`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ hasPaid })
-                });
+    // Update payment status function remains the same
+    async function updatePaymentStatus(teamId, memberId, hasPaid) {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/members/${memberId}/payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hasPaid })
+            });
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
-
-                showToast('Payment status updated successfully', 'success');
-                loadTeamMembers(teamId);  // Only reload team members
-            } catch (error) {
-                showToast(error.message, 'error');
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
+
+            showToast('Payment status updated successfully', 'success');
+            loadTeamMembers(teamId);  // Only reload team members
+        } catch (error) {
+            showToast(error.message, 'error');
         }
+    }
 
 
-        // Add function to edit contribution amount
-        // Function to edit contribution amount
-        function editContributionAmount(teamId, currentAmount) {
-            const contributionStatus = document.getElementById('contributionStatus');
-            contributionStatus.innerHTML = `
+    // Add function to edit contribution amount
+    // Function to edit contribution amount
+    function editContributionAmount(teamId, currentAmount) {
+        const contributionStatus = document.getElementById('contributionStatus');
+        contributionStatus.innerHTML = `
         <div class="bg-white shadow rounded-lg p-4 mb-6">
             <h4 class="text-lg font-medium text-gray-900 mb-4">Edit Team Contribution</h4>
             <div class="flex items-center space-x-4">
@@ -488,247 +549,340 @@
                 </button>
             </div>
         </div>`;
+    }
+
+    // Separate function for updating the contribution amount
+    async function updateContributionAmount(teamId) {
+        // Get the input element using the new ID
+        const amountInput = document.getElementById('updateContributionAmount');
+        console.log('Team ID:', teamId)
+        console.log('Input element found:', !!amountInput);
+        console.log('Raw input value:', amountInput?.value);
+
+        // Ensure the input exists
+        if (!amountInput) {
+            showToast('Could not find contribution amount input', 'error');
+            return;
         }
 
-        // Separate function for updating the contribution amount
-        async function updateContributionAmount(teamId) {
-            // Get the input element using the new ID
-            const amountInput = document.getElementById('updateContributionAmount');
-            console.log('Team ID:',  teamId )
-            console.log('Input element found:', !!amountInput);
-            console.log('Raw input value:', amountInput?.value);
+        // Parse the amount and handle potential issues
+        const amount = parseFloat(amountInput.value.trim());
+        console.log('Parsed amount:', amount);
 
-            // Ensure the input exists
-            if (!amountInput) {
-                showToast('Could not find contribution amount input', 'error');
-                return;
+        // Validate the amount
+        if (!amount || isNaN(amount) || amount <= 0) {
+            console.log('Validation failed:', {
+                isNaN: isNaN(amount),
+                isZeroOrLess: amount <= 0,
+                isEmpty: !amount
+            });
+            showToast('Please enter a valid amount greater than 0', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/teams/${teamId}/contribution`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
 
-            // Parse the amount and handle potential issues
-            const amount = parseFloat(amountInput.value.trim());
-            console.log('Parsed amount:', amount);
+            showToast('Contribution amount updated successfully', 'success');
+            // Reload team members to update the contribution display
+            loadTeamMembers(teamId);
+        } catch (error) {
+            console.error('API Error:', error);
+            showToast(error.message, 'error');
+        }
+    }
 
-            // Validate the amount
-            if (!amount || isNaN(amount) || amount <= 0) {
-                console.log('Validation failed:', {
-                    isNaN: isNaN(amount),
-                    isZeroOrLess: amount <= 0,
-                    isEmpty: !amount
-                });
-                showToast('Please enter a valid amount greater than 0', 'error');
-                return;
+    // Add function to set contribution amount
+    async function setContributionAmount(teamId) {
+        // Get the input element
+        const amountInput = document.getElementById('contributionAmount');
+
+        // Add console logs for debugging
+        console.log('Raw input value:', amountInput?.value);
+
+        // Ensure the input exists
+        if (!amountInput) {
+            showToast('Could not find contribution amount input', 'error');
+            return;
+        }
+
+        // Parse the amount and handle potential issues
+        const amount = parseFloat(amountInput.value.trim());
+        console.log('Parsed amount:', amount);
+
+        // Validate the amount
+        if (!amount || isNaN(amount) || amount <= 0) {
+            console.log('Validation failed:', {
+                isNaN: isNaN(amount),
+                isZeroOrLess: amount <= 0,
+                isEmpty: !amount
+            });
+            showToast('Please enter a valid amount greater than 0', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/teams/${teamId}/contribution`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ amount })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
 
-            try {
-                const response = await fetch(`/api/teams/${teamId}/contribution`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount })
-                });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
-
-                showToast('Contribution amount updated successfully', 'success');
-                // Reload team members to update the contribution display
-                loadTeamMembers(teamId);
-            } catch (error) {
-                console.error('API Error:', error);
-                showToast(error.message, 'error');
-            }
+            showToast('Contribution amount set successfully', 'success');
+            // Reload team members to update the contribution display
+            loadTeamMembers(teamId);
+        } catch (error) {
+            console.error('API Error:', error);
+            showToast(error.message, 'error');
         }
+    }
 
-        // Add function to set contribution amount
-        async function setContributionAmount(teamId) {
-            // Get the input element
-            const amountInput = document.getElementById('contributionAmount');
+    // Update the payment status function to only reload team members
+    async function updatePaymentStatus(teamId, memberId, hasPaid) {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/members/${memberId}/payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ hasPaid })
+            });
 
-            // Add console logs for debugging
-            console.log('Raw input value:', amountInput?.value);
-
-            // Ensure the input exists
-            if (!amountInput) {
-                showToast('Could not find contribution amount input', 'error');
-                return;
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
 
-            // Parse the amount and handle potential issues
-            const amount = parseFloat(amountInput.value.trim());
-            console.log('Parsed amount:', amount);
+            showToast('Payment status updated successfully', 'success');
+            loadTeamMembers(teamId);  // Only reload team members
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    }
 
-            // Validate the amount
-            if (!amount || isNaN(amount) || amount <= 0) {
-                console.log('Validation failed:', {
-                    isNaN: isNaN(amount),
-                    isZeroOrLess: amount <= 0,
-                    isEmpty: !amount
-                });
-                showToast('Please enter a valid amount greater than 0', 'error');
-                return;
+
+    // Add new function to handle leaving a team
+    async function leaveTeam(teamId) {
+        if (!confirm('Are you sure you want to leave this team?')) return;
+
+        try {
+            const response = await fetch(`/api/teams/${teamId}/leave`, {
+                method: 'POST'
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
 
-            try {
-                const response = await fetch(`/api/teams/${teamId}/contribution`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ amount })
-                });
+            await loadTeams();
+            showToast('Successfully left the team', 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    }
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
 
-                showToast('Contribution amount set successfully', 'success');
-                // Reload team members to update the contribution display
-                loadTeamMembers(teamId);
-            } catch (error) {
-                console.error('API Error:', error);
-                showToast(error.message, 'error');
-            }
+    function showCreateTeamModal() {
+        document.getElementById('createTeamModal').style.display = 'block';
+        document.getElementById('teamName').focus();
+    }
+
+    function hideCreateTeamModal() {
+        document.getElementById('createTeamModal').style.display = 'none';
+        document.getElementById('teamName').value = '';
+    }
+
+    async function createTeam() {
+        const teamName = document.getElementById('teamName').value.trim();
+        if (!teamName) {
+            showToast('Please enter a team name', 'error');
+            return;
         }
 
-        // Update the payment status function to only reload team members
-        async function updatePaymentStatus(teamId, memberId, hasPaid) {
-            try {
-                const response = await fetch(`/api/teams/${teamId}/members/${memberId}/payment`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ hasPaid })
-                });
+        try {
+            const response = await fetch('/api/teams', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: teamName })
+            });
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
-
-                showToast('Payment status updated successfully', 'success');
-                loadTeamMembers(teamId);  // Only reload team members
-            } catch (error) {
-                showToast(error.message, 'error');
-            }
-        }
-
-
-        // Add new function to handle leaving a team
-        async function leaveTeam(teamId) {
-            if (!confirm('Are you sure you want to leave this team?')) return;
-
-            try {
-                const response = await fetch(`/api/teams/${teamId}/leave`, {
-                    method: 'POST'
-                });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
-
-                await loadTeams();
-                showToast('Successfully left the team', 'success');
-            } catch (error) {
-                showToast(error.message, 'error');
-            }
-        }
-
-
-        function showCreateTeamModal() {
-            document.getElementById('createTeamModal').style.display = 'block';
-            document.getElementById('teamName').focus();
-        }
-
-        function hideCreateTeamModal() {
-            document.getElementById('createTeamModal').style.display = 'none';
-            document.getElementById('teamName').value = '';
-        }
-
-        async function createTeam() {
-            const teamName = document.getElementById('teamName').value.trim();
-            if (!teamName) {
-                showToast('Please enter a team name', 'error');
-                return;
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
 
-            try {
-                const response = await fetch('/api/teams', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: teamName })
-                });
+            hideCreateTeamModal();
+            await loadTeams();
+            showToast('Team created successfully', 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    }
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
+    async function generateInviteLink(teamId) {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/invite`, {
+                method: 'POST'
+            });
+            const data = await response.json();
 
-                hideCreateTeamModal();
-                await loadTeams();
-                showToast('Team created successfully', 'success');
-            } catch (error) {
-                showToast(error.message, 'error');
+            await navigator.clipboard.writeText(data.inviteLink);
+            showToast('Invite link copied to clipboard', 'success');
+        } catch (error) {
+            showToast('Error generating invite link', 'error');
+        }
+    }
+
+    async function deleteTeam(teamId) {
+        if (!confirm('Are you sure you want to delete this team?')) return;
+
+        try {
+            const response = await fetch(`/api/teams/${teamId}`, {
+                method: 'DELETE'
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error);
             }
+
+            await loadTeams();
+            showToast('Team deleted successfully', 'success');
+        } catch (error) {
+            showToast(error.message, 'error');
+        }
+    }
+
+    // Initialize
+    if (document.getElementById('teamsList')) {
+        loadTeams();
+    }
+
+    // Your existing functions remain the same
+    function showCreateTeamModal() {
+        document.getElementById('createTeamModal').style.display = 'block';
+        document.getElementById('teamName').focus();
+    }
+
+    // Handle URL parameters for messages
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get('message');
+    const error = urlParams.get('error');
+
+    if (message === 'team_joined') {
+        showToast('Successfully joined team', 'success');
+    }
+    if (error) {
+        showToast(error, 'error');
+    }
+
+    let teamMembers = []; // Store team members for the current team
+
+    function showAddExpenseModal(teamId) {
+        const modal = document.getElementById('addExpenseModal');
+        modal.style.display = 'block';
+
+        // Set default date to today
+        document.getElementById('expenseDate').valueAsDate = new Date();
+
+        // Populate team members checkboxes
+        const checkboxesContainer = document.getElementById('teamMembersCheckboxes');
+        checkboxesContainer.innerHTML = teamMembers.map(member => `
+        <div class="flex items-center space-x-2 py-1">
+            <input type="checkbox" 
+                   id="member-${member.user_id}" 
+                   value="${member.user_id}"
+                   class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+            <label for="member-${member.user_id}" class="text-sm text-gray-700">
+                ${member.name}
+            </label>
+        </div>
+    `).join('');
+    }
+
+    function hideAddExpenseModal() {
+        document.getElementById('addExpenseModal').style.display = 'none';
+        // Clear form
+        document.getElementById('expenseDescription').value = '';
+        document.getElementById('expenseAmount').value = '';
+        document.getElementById('expenseDate').value = '';
+    }
+
+    function addExpense() {
+        const description = document.getElementById('expenseDescription').value.trim();
+        const amount = parseFloat(document.getElementById('expenseAmount').value);
+        const date = document.getElementById('expenseDate').value;
+
+        // Get selected team members
+        const selectedMembers = [];
+        document.querySelectorAll('#teamMembersCheckboxes input:checked').forEach(checkbox => {
+            selectedMembers.push(checkbox.value);
+        });
+
+        if (!description || !amount || !date || selectedMembers.length === 0) {
+            showToast('Please fill in all fields and select at least one team member', 'error');
+            return;
         }
 
-        async function generateInviteLink(teamId) {
-            try {
-                const response = await fetch(`/api/teams/${teamId}/invite`, {
-                    method: 'POST'
-                });
-                const data = await response.json();
+        // For now, just add to UI since we'll implement the API later
+        const expensesContainer = document.getElementById('expensesContainer');
+        const expenseDiv = document.createElement('div');
+        expenseDiv.className = 'bg-white shadow rounded-lg p-4';
 
-                await navigator.clipboard.writeText(data.inviteLink);
-                showToast('Invite link copied to clipboard', 'success');
-            } catch (error) {
-                showToast('Error generating invite link', 'error');
-            }
+        const selectedMemberNames = selectedMembers
+            .map(id => teamMembers.find(m => m.user_id === id)?.name)
+            .filter(Boolean)
+            .join(', ');
+
+        expenseDiv.innerHTML = `
+        <div class="flex justify-between items-start">
+            <div>
+                <h5 class="font-medium text-gray-900">${description}</h5>
+                <p class="text-sm text-gray-500">Date: ${new Date(date).toLocaleDateString()}</p>
+                <p class="text-sm text-gray-500">Members: ${selectedMemberNames}</p>
+            </div>
+            <span class="text-lg font-medium text-red-600">-$${amount.toFixed(2)}</span>
+        </div>
+    `;
+
+        expensesContainer.insertBefore(expenseDiv, expensesContainer.firstChild);
+        hideAddExpenseModal();
+        showToast('Expense added successfully', 'success');
+    }
+
+    // Modify the existing loadTeamMembers function to store team members
+    const originalLoadTeamMembers = loadTeamMembers;
+    loadTeamMembers = async function (teamId) {
+        try {
+            const response = await fetch(`/api/teams/${teamId}/members`);
+            if (!response.ok) throw new Error('Failed to load team members');
+
+            const teamDetails = await response.json();
+            teamMembers = teamDetails.members; // Store team members globally
+
+            // Call the original function
+            await originalLoadTeamMembers(teamId);
+        } catch (error) {
+            console.error('Error loading team members:', error);
+            showToast('Error loading team members: ' + error.message, 'error');
         }
+    };
 
-        async function deleteTeam(teamId) {
-            if (!confirm('Are you sure you want to delete this team?')) return;
-
-            try {
-                const response = await fetch(`/api/teams/${teamId}`, {
-                    method: 'DELETE'
-                });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error);
-                }
-
-                await loadTeams();
-                showToast('Team deleted successfully', 'success');
-            } catch (error) {
-                showToast(error.message, 'error');
-            }
-        }
-
-        // Initialize
-        if (document.getElementById('teamsList')) {
-            loadTeams();
-        }
-
-        // Your existing functions remain the same
-        function showCreateTeamModal() {
-            document.getElementById('createTeamModal').style.display = 'block';
-            document.getElementById('teamName').focus();
-        }
-
-        // Handle URL parameters for messages
-        const urlParams = new URLSearchParams(window.location.search);
-        const message = urlParams.get('message');
-        const error = urlParams.get('error');
-
-        if (message === 'team_joined') {
-            showToast('Successfully joined team', 'success');
-        }
-        if (error) {
-            showToast(error, 'error');
-        }
-    </script>
+</script>

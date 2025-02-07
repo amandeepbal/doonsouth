@@ -259,7 +259,118 @@ app.get('/api/teams/:teamId/members', async (req, res) => {
     }
 });
 
+// Expense routes - Add these to your existing Express app
 
+// Create a new expense
+app.post('/api/teams/:teamId/expenses', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { description, amount, expenseDate, memberIds } = req.body;
+
+    if (!description || !amount || !expenseDate || !memberIds || !Array.isArray(memberIds)) {
+        return res.status(400).json({ error: 'Missing or invalid required fields' });
+    }
+
+    try {
+        const expenseId = await TeamManager.createExpense(
+            req.params.teamId,
+            description,
+            parseFloat(amount),
+            new Date(expenseDate),
+            memberIds
+        );
+        res.json({ id: expenseId });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get all expenses for a team
+app.get('/api/teams/:teamId/expenses', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const expenses = await TeamManager.getTeamExpenses(req.params.teamId);
+        res.json(expenses);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get a specific expense
+app.get('/api/teams/:teamId/expenses/:expenseId', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const expense = await TeamManager.getExpense(req.params.expenseId);
+        if (!expense || expense.team_id !== req.params.teamId) {
+            return res.status(404).json({ error: 'Expense not found' });
+        }
+        res.json(expense);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Update an expense
+app.put('/api/teams/:teamId/expenses/:expenseId', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const { description, amount, expenseDate, memberIds } = req.body;
+
+    if (!description || !amount || !expenseDate || !memberIds || !Array.isArray(memberIds)) {
+        return res.status(400).json({ error: 'Missing or invalid required fields' });
+    }
+
+    try {
+        await TeamManager.updateExpense(
+            req.params.expenseId,
+            description,
+            parseFloat(amount),
+            new Date(expenseDate),
+            memberIds
+        );
+        res.json({ success: true });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Delete an expense
+app.delete('/api/teams/:teamId/expenses/:expenseId', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        await TeamManager.deleteExpense(req.params.expenseId);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+// Get expense summary for a team
+app.get('/api/teams/:teamId/expenses/summary', async (req, res) => {
+    if (!req.session.user) {
+        return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    try {
+        const summary = await TeamManager.getTeamExpensesSummary(req.params.teamId);
+        res.json(summary);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 
 const PORT = process.env.PORT || 3000;
